@@ -1,0 +1,31 @@
+// make express app
+// attach port to it
+
+import express, { json } from "express";
+import connectToDb from "./src/connectToDb/connectToDb.js";
+import productRouter from "./src/routes/productRouter.js";
+import cors from "cors";
+
+import dns from "node:dns";
+
+
+let app = express();
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
+app.listen(8000, () => {
+  console.log(`<---- Apllication is listening at 8000 ---->`);
+  connectToDb();
+});
+// npm i cors
+app.use(cors());
+app.use(json()); //make our system capable to take json data , always place it at top
+app.use("/product", productRouter);
+// app.get("/tests", test);
+
+/* 
+Schema -data structure define
+model
+router
+index - define router to express app
+
+*/
