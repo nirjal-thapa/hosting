@@ -41,7 +41,7 @@ const ReadAll = () => {
     const getData = async () => {
       try {
         const data = await axios({
-          url: "http://localhost:8000/product",
+          url: "/product",
           method: "GET",
         });
         setProducts(data.data.result);
@@ -70,7 +70,7 @@ const ReadAll = () => {
   const handleDelete = (product) => async () => {
     if (!window.confirm(`Delete "${product.name}"?`)) return;
     await axios({
-      url: `http://localhost:8000/product/${product._id}`,
+      url: `/product/${product._id}`,
       method: "DELETE",
     });
     setReload((n) => n + 1);

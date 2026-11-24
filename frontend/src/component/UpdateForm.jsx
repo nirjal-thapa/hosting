@@ -21,7 +21,7 @@ const UpdateForm = () => {
     const getData = async () => {
       try {
         const data = await axios({
-          url: `http://localhost:8000/product/${id}`,
+          url: `/product/${id}`,
           method: "GET",
         });
         const product = data.data.result;
@@ -51,7 +51,7 @@ const UpdateForm = () => {
 
     try {
       await axios({
-        url: `http://localhost:8000/product/${id}`,
+        url: `/product/${id}`,
         method: "PATCH",
         data: formData,
       });

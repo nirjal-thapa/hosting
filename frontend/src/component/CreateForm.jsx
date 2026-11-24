@@ -27,7 +27,7 @@ const CreateForm = () => {
 
     try {
       await axios({
-        url: "http://localhost:8000/product",
+        url: "/product",
         method: "POST",
         data: formData,
       });
