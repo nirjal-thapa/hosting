@@ -9,6 +9,13 @@ import { uploadDir } from "./src/utils/upload.js";
 
 import dns from "node:dns";
 
+// Load Backend/.env (e.g. MONGODB_URI) using Node's built-in loader; skip if the file is missing
+try {
+  process.loadEnvFile(new URL("./.env", import.meta.url));
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
+
 
 let app = express();
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
