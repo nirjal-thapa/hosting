@@ -5,6 +5,7 @@ import express, { json } from "express";
 import connectToDb from "./src/connectToDb/connectToDb.js";
 import productRouter from "./src/routes/productRouter.js";
 import cors from "cors";
+import { uploadDir } from "./src/utils/upload.js";
 
 import dns from "node:dns";
 
@@ -19,7 +20,14 @@ app.listen(8000, () => {
 // npm i cors
 app.use(cors());
 app.use(json()); //make our system capable to take json data , always place it at top
+app.use("/uploads", express.static(uploadDir)); // serve product pictures
 app.use("/product", productRouter);
+
+// Return upload/validation errors as JSON instead of an HTML page
+app.use((err, req, res, next) => {
+  const status = err.name === "MulterError" || err.message === "Only image files are allowed" ? 400 : 500;
+  res.status(status).json({ success: false, message: err.message });
+});
 // app.get("/tests", test);
 
 /* 

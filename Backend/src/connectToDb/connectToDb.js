@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const connectToDb = async () => {
-  await mongoose.connect("mongodb+srv://nirjalthapa5_db_user:aLZl8Y5rWTDHzp4d@cluster0.5r8jhm8.mongodb.net");
+  // Local MongoDB by default; set MONGODB_URI to use another server (e.g. Atlas).
+  await mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mern");
   console.log("Connected to db");
 };
 

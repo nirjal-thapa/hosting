@@ -6,17 +6,19 @@ import {
   readSpecificProduct,
   updateProductController,
 } from "../controller/productController.js";
+import upload from "../utils/upload.js";
 
 const productRouter = Router();
 //    "/""=localhost:8000 / products;
 
-productRouter.route("/").post(createProduct).get(readProduct);
+// upload.single("image") reads an optional file from the "image" form field
+productRouter.route("/").post(upload.single("image"), createProduct).get(readProduct);
 
 //    "/""=localhost:8000/products/:id;
 productRouter
   .route("/:id")
   .get(readSpecificProduct)
-  .patch(updateProductController)
+  .patch(upload.single("image"), updateProductController)
   .delete(deleteProduct);
 
 //update

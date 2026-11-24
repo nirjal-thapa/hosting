@@ -2,29 +2,19 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div>
-      <NavLink to={"/create"} style={{ textDecoration: "none" }}>
-        Create Product
-      </NavLink>
-      <NavLink
-        to={"/read"}
-        style={{ marginLeft: "10px", textDecoration: "none" }}
-      >
-        Read Product
-      </NavLink>
-      {/* <NavLink
-        to={"/update"}
-        style={{ marginLeft: "10px", textDecoration: "none" }}
-      >
-        Update Product
-      </NavLink> */}
-      <NavLink
-        to={"/delete"}
-        style={{ marginLeft: "10px", textDecoration: "none" }}
-      >
-        Delete Product
-      </NavLink>
-    </div>
+    <header className="navbar">
+      <div className="navbar-inner">
+        <span className="brand">Inventory</span>
+        <nav className="nav-links">
+          <NavLink to="/read" className="nav-link">
+            Products
+          </NavLink>
+          <NavLink to="/create" className="nav-link">
+            New product
+          </NavLink>
+        </nav>
+      </div>
+    </header>
   );
 };
 

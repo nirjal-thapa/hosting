@@ -16,5 +16,8 @@ const productSchema = Schema({
   isDamage: {
     type: Boolean,
   },
+  image: {
+    type: String, // path like "/uploads/123.jpg"
+  },
 });
 export default productSchema;

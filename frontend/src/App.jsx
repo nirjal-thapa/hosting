@@ -3,10 +3,12 @@ import NavRoute from "../NavRoute";
 
 const App = () => {
   return (
-    <div>
+    <>
       <Navbar />
-      <NavRoute />
-    </div>
+      <main className="container">
+        <NavRoute />
+      </main>
+    </>
   );
 };
 

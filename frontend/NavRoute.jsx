@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import CreateForm from "./src/component/CreateForm";
 import ReadAll from "./src/component/ReadAll";
 import UpdateForm from "./src/component/UpdateForm";
@@ -8,6 +8,7 @@ const NavRoute = () => {
   return (
     <div>
       <Routes>
+        <Route path="/" element={<Navigate to="/read" replace />}></Route>
         <Route path="/create" element={<CreateForm />}></Route>
         <Route path="/read" element={<ReadAll />}></Route>
         <Route path="/readSpecific/:id" element={<ReadSpecific />}></Route>
