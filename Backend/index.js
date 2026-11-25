@@ -8,8 +8,6 @@ import cors from "cors";
 import { uploadDir } from "./src/utils/upload.js";
 
 import dns from "node:dns";
-import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 
 // Load Backend/.env (e.g. MONGODB_URI) using Node's built-in loader; skip if the file is missing
 try {
@@ -22,7 +20,7 @@ try {
 let app = express();
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-// On the AWS server PORT is set to 80 (see deploy/inventory.service); locally it stays 8000
+// The backend listens on 8000. On the server, Nginx (port 80) sends /product and /uploads here
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
@@ -34,14 +32,6 @@ app.use(cors());
 app.use(json()); //make our system capable to take json data , always place it at top
 app.use("/uploads", express.static(uploadDir)); // serve product pictures
 app.use("/product", productRouter);
-
-// Serve the built React website (frontend/dist, made by "npm run build").
-// Any other page address (e.g. /read, /create) gets index.html so React Router can show the right page.
-const websiteDir = fileURLToPath(new URL("../frontend/dist", import.meta.url));
-if (existsSync(websiteDir)) {
-  app.use(express.static(websiteDir));
-  app.get("/{*page}", (req, res) => res.sendFile("index.html", { root: websiteDir }));
-}
 
 // Return upload/validation errors as JSON instead of an HTML page
 app.use((err, req, res, next) => {
