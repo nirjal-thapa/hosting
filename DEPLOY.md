@@ -10,10 +10,10 @@ Simple plan:
 
 ```
 Browser ── http://YOUR_IP ──► Nginx (port 80)
-                                ├── /            → frontend/dist  (built React files)
-                                ├── /product     → backend on port 8000 (PM2)
-                                └── /uploads     → backend on port 8000 (pictures)
+                                ├── /api/...  → backend on port 8000 (PM2): products and pictures
+                                └── anything else → frontend/dist (built React files)
 ```
+Every backend route starts with `/api` (`/api/product`, `/api/uploads/…`), so Nginx needs just **one** rule for the whole backend.
 
 ---
 
@@ -102,7 +102,7 @@ Open **http://YOUR_IP** in your browser. You should see the **Welcome to nginx**
    npm ci
    pm2 start index.js --name backend
    pm2 logs backend --lines 20        # look for "listening at 8000" and "Connected to db" (Ctrl+C to exit)
-   curl http://localhost:8000/product # should print your products as JSON
+   curl http://localhost:8000/api/product   # should print your products as JSON
    ```
 4. Make PM2 start the backend again after a reboot:
    ```bash
@@ -138,23 +138,19 @@ server {
     # Allow picture uploads up to 5 MB (Nginx allows only 1 MB by default)
     client_max_body_size 6M;
 
+    # Frontend: any address that isn't /api, e.g. /read or /create, loads the React app
     location / {
-        try_files $uri /index.html;   # pages like /read and /create load the React app
+        try_files $uri /index.html;
     }
 
-    # Backend API
-    location /product {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_http_version 1.1;
-    }
-
-    # Product pictures (stored by the backend)
-    location /uploads {
+    # Backend: every /api request (all methods: GET, POST, PATCH, DELETE) goes to Node
+    location /api {
         proxy_pass http://127.0.0.1:8000;
         proxy_http_version 1.1;
     }
 }
 ```
+`location /api` matches everything that **starts with** `/api`, such as `/api/product`, `/api/product/<id>` and `/api/uploads/<picture>`. If you add new backend routes under `/api` later, Nginx needs no change.
 Save with Ctrl+O, Enter, Ctrl+X. Then test and reload:
 ```bash
 sudo nginx -t              # must say "syntax is ok" and "test is successful"
@@ -203,6 +199,7 @@ cd ~/hosting/frontend && npm ci && npm run build
 | Still the "Welcome to nginx" page | Check that `server_name` is exactly your IP, then run `sudo nginx -s reload`. |
 | Site doesn't open at all after a reboot | Nginx isn't running. Run `sudo nginx`. |
 | **403 Forbidden** | Run `chmod 755 /home/ec2-user` and check that `frontend/dist` exists. |
+| `process.loadEnvFile is not a function` | Node.js is too old (Amazon Linux's own `nodejs` is v18). Install Node 24 from NodeSource as in Step 2, then reinstall PM2 and restart the backend. |
 | **502 Bad Gateway** | The backend isn't running. Check `pm2 status` and `pm2 logs backend`. |
 | **404** when refreshing `/read` | The `try_files $uri /index.html;` line is missing. |
 | **413** when uploading a picture | The `client_max_body_size 6M;` line is missing. |

@@ -27,7 +27,7 @@ const CreateForm = () => {
 
     try {
       await axios({
-        url: "/product",
+        url: "/api/product",
         method: "POST",
         data: formData,
       });

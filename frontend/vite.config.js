@@ -5,11 +5,10 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   server: {
-    // While developing (npm run dev), send API and picture requests to the backend on port 8000.
-    // On the server, the backend serves the website itself, so no proxy is needed there.
+    // While developing (npm run dev), send every /api request to the backend on port 8000.
+    // On the server, Nginx does the same job.
     proxy: {
-      "/product": "http://localhost:8000",
-      "/uploads": "http://localhost:8000",
+      "/api": "http://localhost:8000",
     },
   },
 });

@@ -14,7 +14,7 @@ const ReadSpecific = () => {
     const getData = async () => {
       try {
         const data = await axios({
-          url: `/product/${id}`,
+          url: `/api/product/${id}`,
           method: "GET",
         });
         if (data.data.result) setProduct(data.data.result);
@@ -29,7 +29,7 @@ const ReadSpecific = () => {
   const handleDelete = async () => {
     if (!window.confirm(`Delete "${product.name}"?`)) return;
     await axios({
-      url: `/product/${id}`,
+      url: `/api/product/${id}`,
       method: "DELETE",
     });
     navigate("/read");

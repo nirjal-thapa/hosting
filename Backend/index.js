@@ -30,8 +30,9 @@ app.listen(port, () => {
 // npm i cors
 app.use(cors());
 app.use(json()); //make our system capable to take json data , always place it at top
-app.use("/uploads", express.static(uploadDir)); // serve product pictures
-app.use("/product", productRouter);
+// All backend routes start with /api, so Nginx needs only one rule to reach the backend
+app.use("/api/uploads", express.static(uploadDir)); // product pictures
+app.use("/api/product", productRouter);
 
 // Return upload/validation errors as JSON instead of an HTML page
 app.use((err, req, res, next) => {
